@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d44bc24a-330c-47ff-8ea1-f6d8da84a78d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/smartcart.html" afterPath="$PROJECT_DIR$/smartcart.html" />
     </list>
     <ignored path="ruben-kolodny.github.io.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,11 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="481">
-              <caret line="167" column="125" selection-start-line="167" selection-start-column="125" selection-end-line="167" selection-end-column="125" />
+            <state relative-caret-position="305">
+              <caret line="272" column="65" selection-start-line="272" selection-start-column="65" selection-end-line="272" selection-end-column="65" />
               <folding>
                 <element signature="e#9808#9849#0" expanded="true" />
                 <element signature="e#9880#9906#0" expanded="true" />
@@ -49,12 +50,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="smartcart.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="smartcart.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/smartcart.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
-              <folding />
+            <state relative-caret-position="345">
+              <caret line="102" column="132" selection-start-line="102" selection-start-column="132" selection-end-line="102" selection-end-column="132" />
+              <folding>
+                <element signature="e#5340#5393#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -74,8 +77,8 @@
       <list>
         <option value="$PROJECT_DIR$/glass.html" />
         <option value="$PROJECT_DIR$/augmedix.html" />
-        <option value="$PROJECT_DIR$/smartcart.html" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/smartcart.html" />
       </list>
     </option>
   </component>
@@ -403,6 +406,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="d44bc24a-330c-47ff-8ea1-f6d8da84a78d" name="Default" comment="" />
@@ -456,6 +462,19 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="272" column="65" selection-start-line="272" selection-start-column="65" selection-end-line="272" selection-end-column="65" />
+          <folding>
+            <element signature="e#9808#9849#0" expanded="true" />
+            <element signature="e#9880#9906#0" expanded="true" />
+            <element signature="e#10370#10411#0" expanded="true" />
+            <element signature="e#10444#10470#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/augmedix.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
@@ -468,21 +487,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/smartcart.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="167" column="125" selection-start-line="167" selection-start-column="125" selection-end-line="167" selection-end-column="125" />
+        <state relative-caret-position="345">
+          <caret line="102" column="132" selection-start-line="102" selection-start-column="132" selection-end-line="102" selection-end-column="132" />
           <folding>
-            <element signature="e#9808#9849#0" expanded="true" />
-            <element signature="e#9880#9906#0" expanded="true" />
-            <element signature="e#10370#10411#0" expanded="true" />
-            <element signature="e#10444#10470#0" expanded="true" />
+            <element signature="e#5340#5393#0" expanded="true" />
           </folding>
         </state>
       </provider>
