@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d44bc24a-330c-47ff-8ea1-f6d8da84a78d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/augmedix.html" afterPath="$PROJECT_DIR$/augmedix.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/smartcart.html" afterPath="$PROJECT_DIR$/smartcart.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
     </list>
     <ignored path="ruben-kolodny.github.io.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,11 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="272" column="65" selection-start-line="272" selection-start-column="65" selection-end-line="272" selection-end-column="65" />
+            <state relative-caret-position="480">
+              <caret line="66" column="95" selection-start-line="66" selection-start-column="95" selection-end-line="66" selection-end-column="95" />
               <folding>
                 <element signature="e#9808#9849#0" expanded="true" />
                 <element signature="e#9880#9906#0" expanded="true" />
@@ -38,10 +37,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="augmedix.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="augmedix.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/augmedix.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
+            <state relative-caret-position="757">
               <caret line="100" column="130" selection-start-line="100" selection-start-column="130" selection-end-line="100" selection-end-column="130" />
               <folding>
                 <element signature="e#4880#4931#0" expanded="true" />
@@ -76,9 +75,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/glass.html" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/smartcart.html" />
         <option value="$PROJECT_DIR$/augmedix.html" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -462,19 +461,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="272" column="65" selection-start-line="272" selection-start-column="65" selection-end-line="272" selection-end-column="65" />
-          <folding>
-            <element signature="e#9808#9849#0" expanded="true" />
-            <element signature="e#9880#9906#0" expanded="true" />
-            <element signature="e#10370#10411#0" expanded="true" />
-            <element signature="e#10444#10470#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/smartcart.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -487,10 +473,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/augmedix.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
+        <state relative-caret-position="757">
           <caret line="100" column="130" selection-start-line="100" selection-start-column="130" selection-end-line="100" selection-end-column="130" />
           <folding>
             <element signature="e#4880#4931#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="66" column="95" selection-start-line="66" selection-start-column="95" selection-end-line="66" selection-end-column="95" />
+          <folding>
+            <element signature="e#9808#9849#0" expanded="true" />
+            <element signature="e#9880#9906#0" expanded="true" />
+            <element signature="e#10370#10411#0" expanded="true" />
+            <element signature="e#10444#10470#0" expanded="true" />
           </folding>
         </state>
       </provider>
