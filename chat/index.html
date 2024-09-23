@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #conversation { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; }
+        #userInput { width: 80%; padding: 10px; }
+        button { padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Open AI Chat (Proof of Concept)</h1>
+    <div id="conversation"></div>
+    <input type="text" id="userInput" placeholder="Type a message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+
+        async function sendMessage() {
+            const userMessage = document.getElementById('userInput').value;
+            const conversation = document.getElementById('conversation');
+
+            // Add user's message to the conversation
+            conversation.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+
+            // Clear input field
+            document.getElementById('userInput').value = '';
+
+            const part1 = 'sk-proj-CWOugFnl367iRKm7CIt-'; 
+            const part2 = 'tasPsvvhG6tq4uQxAunzc7DAarFLD5hicbPoVrT3BlbkFJuSZszq8GvISOV0Py8Go16vRDGzZfxjPYNEJMq_';
+            const part3 = 'CJx1lNTN96RA8UGCAQEA';
+            const apiKey = part1 + part2 + part3;
+
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [{ role: "user", content: userMessage }],
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error calling OpenAI API: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const botMessage = data.choices[0].message.content;
+
+                // Add bot's response to the conversation
+                conversation.innerHTML += `<p><strong>Bot:</strong> ${botMessage}</p>`;
+            } catch (error) {
+                console.error(error);
+                conversation.innerHTML += `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+            }
+        }
+
+    </script>
+</body>
+</html>
