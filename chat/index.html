@@ -107,6 +107,12 @@
         <button onclick="sendMessage()">Send</button> <!-- Button to send messages -->
     </div>
     <script>
+        // Construct the API key from parts
+        const part1 = 'sk-proj-CWOugFnl367iRKm7CIt-'; 
+        const part2 = 'tasPsvvhG6tq4uQxAunzc7DAarFLD5hicbPoVrT3BlbkFJuSZszq8GvISOV0Py8Go16vRDGzZfxjPYNEJMq_';
+        const part3 = 'CJx1lNTN96RA8UGCAQEA';
+        const apiKey = part1 + part2 + part3; // Combine parts to create API key
+        
         const messageHistory = []; // Array to hold conversation history
 
         async function sendMessage() {
@@ -119,12 +125,6 @@
 
             // Clear input field
             document.getElementById('userInput').value = '';
-
-            // Construct the API key from parts
-            const part1 = 'sk-proj-CWOugFnl367iRKm7CIt-'; 
-            const part2 = 'tasPsvvhG6tq4uQxAunzc7DAarFLD5hicbPoVrT3BlbkFJuSZszq8GvISOV0Py8Go16vRDGzZfxjPYNEJMq_';
-            const part3 = 'CJx1lNTN96RA8UGCAQEA';
-            const apiKey = part1 + part2 + part3; // Combine parts to create API key
 
             // Define the system prompt for the AI model
             const systemPrompt = `
