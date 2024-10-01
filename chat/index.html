@@ -107,6 +107,13 @@
             text-align: right; /* Align user messages to the right */
             margin-left: auto; /* Push user messages to the right */
         }
+
+        /* Style for the system parameters */
+        #systemParameters {
+            color: #aaa; /* Light grey color */
+            font-size: 12px; /* Small text size */
+            margin-top: 20px; /* Spacing at the top */
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Include Marked.js for markdown parsing -->
 </head>
@@ -116,6 +123,8 @@
         <input type="text" id="userInput" placeholder="Type your message..." /> <!-- Input field for user messages -->
         <button onclick="sendMessage()">Send</button> <!-- Button to send messages -->
     </div>
+    <div id="systemParameters"></div> <!-- Placeholder for system parameters -->
+
     <script>
         // Define the API key by concatenating parts
         const part1 = 'sk-proj-CWOugFnl367iRKm7CIt-'; 
@@ -125,6 +134,18 @@
     
         const messageHistory = []; // Array to hold the history of messages exchanged
         let embeddingsStore = []; // Array to store embeddings for contextual knowledge
+
+        const model = "gpt-3.5-turbo";
+
+        // knowledge base
+        const concepts = [
+                "Eat whole, real food: Focus on vegetables, healthy fats, clean proteins, and fiber-rich carbs. Ditch the processed, sugary foods that fuel inflammation and disease",
+                "Move daily: Exercise doesn't have to be complicated - just get moving! Aim for 30 minutes of walking, strength training, or yoga each day to support heart, muscles, and brain",
+                "Manage stress: Chronic stress drives inflammation and hormonal imbalances. Simple practices like meditation, deep breathing or even spending time in nature can do wonders for calming your mind and body",
+                "Prioritize sleep: Sleep is when your body heals and regenerates. Aim for 7-8 hours of quality sleep each night to support your immune system, brain, and metabolism",
+                "Reduce toxins: From the air we breath to the food we eat, toxins are everywhere. Start by switching to non-toxic cleaning products and reducing plastic use, and choose organic foods when possible",
+                "Ruben Lopez is the author who programmed this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/ "
+        ];
     
         // Function to fetch embeddings for a given text input using OpenAI API
         async function fetchEmbedding(text) {
@@ -146,15 +167,6 @@
     
         // Function to add relevant knowledge about naturopathy to the embeddings store
         async function addContextualKnowledge() {
-            const concepts = [
-                "Eat whole, real food: Focus on vegetables, healthy fats, clean proteins, and fiber-rich carbs. Ditch the processed, sugary foods that fuel inflammation and disease",
-                "Move daily: Exercise doesn't have to be complicated - just get moving! Aim for 30 minutes of walking, strength training, or yoga each day to support heart, muscles, and brain",
-                "Manage stress: Chronic stress drives inflammation and hormonal imbalances. Simple practices like meditation, deep breathing or even spending time in nature can do wonders for calming your mind and body",
-                "Prioritize sleep: Sleep is when your body heals and regenerates. Aim for 7-8 hours of quality sleep each night to support your immune system, brain, and metabolism",
-                "Reduce toxins: From the air we breath to the food we eat, toxins are everywhere. Start by switching to non-toxic cleaning products and reducing plastic use, and choose organic foods when possible",
-                "Ruben Lopez is the author who programmed this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/ "
-            ];
-    
             // Loop through each concept to fetch its embedding and store it
             for (const concept of concepts) {
                 const embedding = await fetchEmbedding(concept); // Get embedding for each concept
@@ -230,7 +242,7 @@
                         'Authorization': `Bearer ${apiKey}`, // Include API key in authorization
                     },
                     body: JSON.stringify({
-                        model: "gpt-3.5-turbo", // Specify the model to be used for chat
+                        model: model, // Specify the model to be used for chat
                         messages: [{ role: 'system', content: systemPrompt }, ...messageHistory], // Include system prompt and message history
                         max_tokens: 500, // Limit the response length
                         temperature: 0.7, // Set the temperature for response variability
@@ -248,6 +260,9 @@
                 conversation.innerHTML += `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
                 conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom of the conversation
             }
+
+            // Update display of system parameters after each message
+            displaySystemParameters(systemPrompt, context, model, concepts);
         }
     
         // Function to stream the bot's response character by character
@@ -282,6 +297,19 @@
     
         // Initialize the embeddings store by adding some knowledge
         addContextualKnowledge(); // Call the function to populate embeddings store with contextual knowledge
+
+        // Initial display of parameters
+        displaySystemParameters("", "", model, concepts);
+
+        function displaySystemParameters(systemPrompt, context, model, concepts) {
+            const systemParametersDiv = document.getElementById('systemParameters');
+            systemParametersDiv.innerHTML = `
+                <p><strong>Model:</strong> ${model}</p>
+                <p><strong>System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${systemPrompt.trim()}</p>
+                <p><strong>Closest Knowledge Match:</strong> ${context.trim()}</p>
+                <p><strong>Contextual Knowledge:</strong> ${concepts.join(", ")}</p>
+            `;
+        }
     </script>
 </body>
 </html>
