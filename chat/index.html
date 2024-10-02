@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"> <!-- Set character encoding for the document -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensure proper rendering on mobile devices -->
-    <title>Chatbot</title> <!-- Title of the webpage -->
+    <title>Chat</title> <!-- Title of the webpage -->
     <style>
         /* Basic styling for the body */
         body {
@@ -136,6 +136,14 @@
         let embeddingsStore = []; // Array to store embeddings for contextual knowledge
 
         const model = "gpt-3.5-turbo";
+        const maxResponseLength = 500; // measured in tokens
+
+        // Build the system prompt with the following components:
+        const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness.`
+        const goal = `Your goal is to give personalized health consultations, as if you are their healthcare provider or doctor.`
+        const userInteraction = `Based on the user's input, provide clear answers and actionable, tailored treatment suggestions.`
+        const tone = `Use a compassionate and empathetic tone, guiding users towards holistic health solutions that consider their physical, emotional, and environmental well-being.` 
+        const outcome = `Always aim to empower users with knowledge and actionable steps they can take towards achieving their wellness goals.`
 
         // knowledge base
         const concepts = [
@@ -225,12 +233,12 @@
     
             // Define the system prompt for the AI with integrated context
             const systemPrompt = `
-                You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness.
-                Your goal is to give personalized health consultations, as if you are the healthcare provider or doctor.
+                ${role}
+                ${goal}
                 Use the following knowledge for context: ${context}
-                Based on the user's input, provide clear answers and actionable, tailored treatment suggestions.
-                Use a compassionate and empathetic tone, guiding users towards holistic health solutions that consider their physical, emotional, and environmental well-being. 
-                Always aim to empower users with knowledge and actionable steps they can take towards achieving their wellness goals.
+                ${userInteraction}
+                ${tone}
+                ${outcome}
             `;
     
             try {
@@ -244,7 +252,7 @@
                     body: JSON.stringify({
                         model: model, // Specify the model to be used for chat
                         messages: [{ role: 'system', content: systemPrompt }, ...messageHistory], // Include system prompt and message history
-                        max_tokens: 500, // Limit the response length
+                        max_tokens: maxResponseLength, // Limit the response length
                         temperature: 0.7, // Set the temperature for response variability
                     }),
                 });
@@ -262,7 +270,7 @@
             }
 
             // Update display of system parameters after each message
-            displaySystemParameters(systemPrompt, context, model, concepts);
+            displaySystemParameters(systemPrompt, context);
         }
     
         // Function to stream the bot's response character by character
@@ -298,13 +306,23 @@
         // Initialize the embeddings store by adding some knowledge
         addContextualKnowledge(); // Call the function to populate embeddings store with contextual knowledge
 
-        // Initial display of parameters
-        displaySystemParameters("", "", model, concepts);
+        // build initial prompt
+        let initialPrompt = `
+            ${role}
+            ${goal}
+            ${userInteraction}
+            ${tone}
+            ${outcome}
+        `;
 
-        function displaySystemParameters(systemPrompt, context, model, concepts) {
+        // Initial display of parameters
+        displaySystemParameters(initialPrompt, "");
+
+        function displaySystemParameters(systemPrompt, context) {
             const systemParametersDiv = document.getElementById('systemParameters');
             systemParametersDiv.innerHTML = `
                 <p><strong>Model:</strong> ${model}</p>
+                <p><strong>Max Response Length:</strong> ${maxResponseLength} tokens</p>
                 <p><strong>System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${systemPrompt.trim()}</p>
                 <p><strong>Closest Knowledge Match:</strong> ${context.trim()}</p>
                 <p><strong>Contextual Knowledge:</strong> ${concepts.join(", ")}</p>
