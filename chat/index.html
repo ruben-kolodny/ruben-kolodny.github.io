@@ -87,6 +87,9 @@
 
     /* Styling for the chat container */
     #chatContainer {
+        animation: fadeInBottom 1s ease forwards;
+        animation-delay: 1s; /* Delay */
+        opacity: 0; /* Start with hidden */
         max-width: 700px;
         margin: 60px auto;
         padding: 30px;
@@ -164,9 +167,14 @@
 
     /* Style for system parameters */
     #systemParameters {
+        animation: fadeInBottom 1s ease forwards;
+        animation-delay: 1s; /* Delay */
+        opacity: 0; /* Start with hidden */
         color: #7f6a55; /* Muted brown color */
         font-size: 14px;
         margin-top: 24px;
+        margin-left: 65px;
+        margin-right: 65px;
     }
 
 
@@ -396,6 +404,11 @@
                 <p><strong>Contextual Knowledge:</strong> ${concepts.join(", ")}</p>
             `;
         }
+
+        // Automatically send a greeting message after the page loads (2 seconds in)
+        window.onload = () => setTimeout(() => {
+            streamBotResponse("What health concerns or questions do you have in mind today?")
+        }, 2000);
     </script>
 </body>
 </html>
