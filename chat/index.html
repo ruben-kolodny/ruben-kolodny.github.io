@@ -181,6 +181,7 @@
        
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Include Marked.js for markdown parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script> <!-- pdf extraction -->
 </head>
 <body>
     <div class="header-text">
@@ -228,6 +229,7 @@
                 "Manage stress: Chronic stress drives inflammation and hormonal imbalances. Simple practices like meditation, deep breathing or even spending time in nature can do wonders for calming your mind and body",
                 "Prioritize sleep: Sleep is when your body heals and regenerates. Aim for 7-8 hours of quality sleep each night to support your immune system, brain, and metabolism",
                 "Reduce toxins: From the air we breath to the food we eat, toxins are everywhere. Start by switching to non-toxic cleaning products and reducing plastic use, and choose organic foods when possible",
+                "The MantraWellnessOrganization.pdf outlines holistic health principles through naturopathic and Ayurvedic principles, focusing on the body's innate healing, addressing root causes of illness, and the importance of mind-body therapies.",
                 "Ruben Lopez is the author who programmed this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/ "
         ];
     
@@ -256,6 +258,24 @@
                 const embedding = await fetchEmbedding(concept); // Get embedding for each concept
                 embeddingsStore.push({ text: concept, embedding }); // Store the concept and its embedding
             }
+        }
+        
+        async function addPDFKnowledge() {
+            const pdfPages = await extractTextFromPDF("https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf");
+
+            for (let pageNum = 0; pageNum < pdfPages.length; pageNum++) {
+                const pageText = pdfPages[pageNum]; // Get text for the current page
+                const embedding = await fetchEmbedding(pageText); // Get embedding for the current page text
+                
+                // Store the text and its embedding in the embeddings store
+                embeddingsStore.push({ 
+                    text: pageText, 
+                    embedding,
+                    page: pageNum + 1 // Store the page number (1-based index)
+                }); 
+            }
+            
+            console.log('Knowledge added for all PDF pages.');
         }
     
         // Function to calculate cosine similarity between two vectors (embeddings)
@@ -380,7 +400,8 @@
         });
     
         // Initialize the embeddings store by adding some knowledge
-        addContextualKnowledge(); // Call the function to populate embeddings store with contextual knowledge
+        addContextualKnowledge(); // Call the function to populate the embeddings store with contextual knowledge
+        addPDFKnowledge(); // Call the function to popupulate the embeddings store with pages of PDF
 
         // build initial prompt
         let initialPrompt = `
@@ -409,6 +430,42 @@
         window.onload = () => setTimeout(() => {
             streamBotResponse("What health concerns or questions do you have in mind today?")
         }, 2000);
+
+
+        async function extractTextFromPDF(pdfUrl) {
+            // Set the worker source
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+            
+            console.log('Loading PDF document...'); // Debug statement
+
+            const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+            console.log('PDF loaded, number of pages:', pdf.numPages); // Debug statement
+
+            let extractedTextByPage = []; // Array to hold text for each page
+            const pdfName = pdfUrl.split('/').pop(); // Extract the PDF name from the URL
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                console.log(`Extracting text from page ${pageNum}...`); // Debug statement
+                const page = await pdf.getPage(pageNum);
+                const textContent = await page.getTextContent();
+                
+                let pageText = ''; // String to hold text for the current page
+
+                textContent.items.forEach(item => {
+                    pageText += item.str + ' ';
+                });
+                
+                // Prepend PDF name and page number
+                const pageIdentifier = `${pdfName}, page ${pageNum}: `;
+                extractedTextByPage.push(pageIdentifier + pageText.trim()); // Add the page text to the array
+                // console.log(extractedTextByPage[extractedTextByPage.length - 1]);
+                console.log(`Page ${pageNum} extracted, current text length: ${pageText.length}`); // Debug statement
+            }
+
+            console.log('Text extraction complete, total pages:', extractedTextByPage.length); // Debug statement
+            return extractedTextByPage; // Return the array of texts for each page
+        }
+            
     </script>
 </body>
 </html>
