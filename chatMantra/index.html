@@ -216,19 +216,14 @@
         const maxResponseLength = 1000; // measured in tokens
 
         // Build the system prompt with the following components:
-        const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness.`
+        const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness, following the principles in your embeddings store.`
         const goal = `Your goal is to give personalized health consultations, as if you are their healthcare provider or doctor.`
-        const userInteraction = `Based on the user's input, provide clear answers and actionable, tailored treatment suggestions.`
+        const userInteraction = `Based on the user's input, provide clear answers and actionable, tailored treatment suggestions, based on the content in your embeddings store.`
         const tone = `Use a compassionate and empathetic tone, guiding users towards holistic health solutions that consider their physical, emotional, and environmental well-being.` 
         const outcome = `Always aim to empower users with knowledge and actionable steps they can take towards achieving their wellness goals.`
 
         // knowledge base
         const concepts = [
-                "Eat whole, real food: Focus on vegetables, healthy fats, clean proteins, and fiber-rich carbs. Ditch the processed, sugary foods that fuel inflammation and disease",
-                "Move daily: Exercise doesn't have to be complicated - just get moving! Aim for 30 minutes of walking, strength training, or yoga each day to support heart, muscles, and brain",
-                "Manage stress: Chronic stress drives inflammation and hormonal imbalances. Simple practices like meditation, deep breathing or even spending time in nature can do wonders for calming your mind and body",
-                "Prioritize sleep: Sleep is when your body heals and regenerates. Aim for 7-8 hours of quality sleep each night to support your immune system, brain, and metabolism",
-                "Reduce toxins: From the air we breath to the food we eat, toxins are everywhere. Start by switching to non-toxic cleaning products and reducing plastic use, and choose organic foods when possible",
                 "Ruben Lopez is the author who programmed this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/ "
         ];
     
@@ -400,7 +395,7 @@
     
         // Initialize the embeddings store by adding some knowledge
         addContextualKnowledge(); // Call the function to populate the embeddings store with contextual knowledge
-        //addPDFKnowledge(); // Call the function to popupulate the embeddings store with pages of PDF
+        addPDFKnowledge(); // Call the function to popupulate the embeddings store with pages of PDF
 
         // build initial prompt
         let initialPrompt = `
@@ -422,6 +417,7 @@
                 <p><strong>System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${systemPrompt.trim()}</p>
                 <p><strong>Closest Knowledge Match:</strong> ${context.trim()}</p>
                 <p><strong>Contextual Knowledge:</strong> ${concepts.join(", ")}</p>
+                 <p><strong>PDF Knowledge:</strong> <a href="https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf" target="_blank">MantraWellnessOrganization.pdf</a></p>
             `;
         }
 
