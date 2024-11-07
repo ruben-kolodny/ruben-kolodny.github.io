@@ -16,6 +16,7 @@
         color: #7f6a55; /* Muted brown color */
     }
 
+    /* Applied to header text */
     @keyframes fadeInLeft {
         from {
             opacity: 0;
@@ -27,6 +28,7 @@
         }
     }
 
+    /* Applied to chatContainer text */
     @keyframes fadeInBottom {
         from {
             opacity: 0;
@@ -116,18 +118,11 @@
         font-size: 20px; /* Adjust size to be smaller than h1 */
         margin-top: 20px; /* Add some top margin */
         font-weight: lighter; /* Light weight for the text */
-        color: #4b3f35; /* Dark brown text */
-
         width: calc(100% - 22px);
         padding: 12px;
         border-radius: 10px;
         border: 2px solid #ffffff; 
         background-color: #ffffff;
-    }
-
-    /* Change border color when the input field is focused */
-    #userInput:focus {
-        outline: none; /* Remove default blue outline */
     }
 
     .input-container {
@@ -141,6 +136,17 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         margin-right: 10px;
+        transition: color 0.2s ease; /* Smooth transition when changing text color */
+    }
+
+    /* Placeholder color (light gray) */
+    .input-box::placeholder {
+        color: lightgray; /* Set to light gray */
+    }
+
+    /* Change the text color when typing */
+    .input-box:focus {
+        color:  #4b3f35; /* Darker color for the text when focused */
     }
 
     .submit-button {
@@ -159,6 +165,18 @@
         background-color: #0056b3;
     }
 
+    #typingGif {
+        opacity: 0; /* Start hidden */
+        visibility: hidden; /* Ensure it doesn't take up space */
+        transition: opacity 0.3s ease, visibility 0s 0.3s; /* Fade-in, fade-out transition */
+    }
+
+    #typingGif.visible {
+        opacity: 1; /* Make visible */
+        visibility: visible; /* Make the element visible in layout */
+        transition: opacity 0.3s ease, visibility 0s 0s; /* Remove the delay for visibility */
+    }
+
     /* Styling for bot messages */
     .bot-message {
         color: #4b3f35; /* Dark brown text */
@@ -167,7 +185,6 @@
         background-color: white; 
         max-width: 95%;
         margin: auto; /* Center the div horizontally and add vertical spacing */
-
     }
 
     /* Styling for user messages */
@@ -205,15 +222,22 @@
             Ruben AI<br>
         </h1>
     </div>
-    
     <div id="chatContainer"> <!-- Main container for the chat interface -->
-        <div id="conversation"></div> <!-- Area to display chat messages -->
-            <div class="input-container">
-                <input type="text" id="userInput" class="input-box" placeholder="Answer here..." /> <!-- Input field for user messages -->
-                <button class="submit-button" onclick="sendMessage()">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+        <div id="conversation"> <!-- Area to display chat messages -->
+            <!-- Hidden GIF embed -->
+            <div id="typingGif" class="tenor-gif-embed" data-postid="17348174" data-share-method="host" data-aspect-ratio="1.82857" data-width="10%" style="display: none;">
+                <a href="https://tenor.com/view/typing-text-waiting-loading-gif-17348174"></a>
+                <a href="https://tenor.com/search/typing-gifs"></a>
             </div>
+            <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+        </div> 
+
+        <div class="input-container">
+            <input type="text" id="userInput" class="input-box" placeholder="Answer here..." /> <!-- Input field for user messages -->
+            <button class="submit-button" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
     </div>
     <div id="systemParameters"></div> <!-- Placeholder for system parameters -->
 
@@ -228,7 +252,7 @@
         let embeddingsStore = []; // Array to store embeddings for contextual knowledge
 
         const model = "gpt-3.5-turbo";
-        const maxResponseLength = 300; // measured in tokens
+        const maxResponseLength = 100; // measured in tokens
 
         // Build the system prompt with the following components:
         const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness.`
@@ -317,12 +341,33 @@
     
             return closestMatch; // Return the closest matching text
         }
-    
+
+        // Function to show typing animation with fade-in effect
+        function showTypingAnimation() {
+            const typingGif = document.getElementById('typingGif');
+            typingGif.classList.add('visible'); // Add visible class to trigger fade-in
+        }
+
+        // Function to hide typing animation with fade-out effect
+        function hideTypingAnimation() {
+            const typingGif = document.getElementById('typingGif');
+            typingGif.classList.remove('visible'); // Remove visible class to trigger fade-out
+        }   
+
+        // Global variable to hold the bot message element
+        const botMessageElement = document.createElement('div');
+        botMessageElement.classList.add('bot-message'); // Assign class for styling
+        document.getElementById('conversation').appendChild(botMessageElement); // Add bot message element to conversation
+
         // Function to send a message and get a response from the chatbot
         async function sendMessage() {
             const userMessage = document.getElementById('userInput').value; // Get user input
             const conversation = document.getElementById('conversation'); // Get the conversation element
-    
+
+            // Clear previous message
+            botMessageElement.innerHTML = '';
+            showTypingAnimation();
+
             // Add user's message to the conversation
             //conversation.innerHTML += `<p class="user-message">${userMessage}</p>`;
             //conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom of the conversation
@@ -371,6 +416,7 @@
                 const botMessage = data.choices[0].message.content; // Extract the chatbot's message
     
                 messageHistory.push({ role: "assistant", content: botMessage }); // Add bot's message to history
+                hideTypingAnimation(); 
                 streamBotResponse(botMessage); // Call function to display bot's response
             } catch (error) {
                 console.error(error); // Log any errors to the console
@@ -383,10 +429,6 @@
             displaySystemParameters(systemPrompt, context);
         }
     
-        // Global variable to hold the bot message element
-        const botMessageElement = document.createElement('div');
-        botMessageElement.classList.add('bot-message'); // Assign class for styling
-        document.getElementById('conversation').appendChild(botMessageElement); // Add bot message element to conversation
 
         // Function to stream the bot's response character by character
         function streamBotResponse(message) {
