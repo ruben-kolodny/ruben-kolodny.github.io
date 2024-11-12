@@ -256,21 +256,31 @@
         let embeddingsStore = []; // Array to store embeddings for contextual knowledge
 
         const model = "gpt-3.5-turbo";
-        const maxResponseLength = 1000; // measured in tokens
+        const maxResponseLength = 200; // measured in tokens
 
         // Build the system prompt with the following components:
-        const role = `"You are a digital version of Ruben K. Lopez—friendly, knowledgeable, and engaging. You respond as Ruben, so when the user says 'Tell me about yourself,' they are asking for information about Ruben, his background, skills, and experiences. If a user asks about 'you', 'your' or 'yourself,' always respond from Ruben’s perspective, providing honest, concise, and engaging answers about his professional background, skills, and experiences. Keep responses conversational and focused on Ruben. Use emojis to add a friendly, personal touch. 😊`
-        const goal = ''
-        const userInteraction = ''
-        const tone = ''
-        const outcome = ''
+        const role = `
+            You are Ruben's digital twin, speaking in the first person as 'Ruben.' 
+            Your job is to answer questions about Ruben's professional experience, 
+            skills, and background as accurately as possible. 
+            If you know the answer from Ruben's background information, 
+            respond clearly and succinctly in the first person. 
+            If you don't know, respond with phrases like, 'I don't know,' 
+            'I'm not familiar with that,' or 'I don't believe I have experience with that.' 
+            Do not make up information. Prioritize accuracy over creativity.
+        `;
+
+        const goal = '';
+        const userInteraction = '';
+        const tone = '';
+        const outcome = '';
 
         // knowledge base
         const concepts = [
             "About you (yourself): I’m a Senior Software Engineer with a Product Manager Certification and 9 years of engineering experience, specializing in automation and AI for agile, high-quality releases. Currently, I lead test automation efforts at PTC, where I've enhanced testing efficiency and managed automation projects across various products. My technical expertise covers areas like computer vision, augmented reality, generative AI, and cross-platform testing for web, mobile, and desktop applications. I'm passionate about creating technology that works seamlessly and am constantly expanding my skills, particularly in Technical Product Management, to bridge technical solutions with business goals. 🚀 My strength lies in building robust automation systems—using tools like Playwright, Appium, and Unity Test Framework—that can handle hundreds of test cases daily, effectively doing the work of an entire QA team. This approach has accelerated QA processes, enabling rapid and reliable releases. ✅ As a certified Product Manager, I also bring a strategic focus, aligning business objectives with user needs and driving roadmaps and feature prioritization for impactful product delivery. 🎯 In addition, I’m skilled in integrating AI into QA workflows, using custom ChatGPTs and OpenAI APIs to optimize test automation. For example, I’m developing solutions where AI generates test cases from acceptance criteria, codes automated tests, and executes them—pushing the boundaries of testing efficiency and product validation. 🧠 Beyond QA and automation, I specialize in AR/VR and game development, with expertise in computer vision, object tracking, and spatial mapping. My work in Unity strengthens my capability to lead testing in immersive AR experiences, building on my background from a game development internship. 🎮 I’m also adept in DevOps, streamlining pre-merge testing with CI/CD workflows via GitHub Actions and Azure. These efforts reduce manual testing by around 100 hours weekly and ensure continuous validation for reliable releases. 🔄 Driven by a commitment to quality and innovation, I’m always open to new challenges and ready to elevate the next project I tackle. Let’s connect! 🌟💡",
             "Your Work Experience: Ruben K. Lopez has extensive experience in software engineering, test automation, and mobile development, with a focus on augmented reality (AR), healthcare, and gaming. As a Senior Software Development Engineer in Test at Vuforia (PTC) from March 2018 - Present (6 years, 8 months), he led test automation projects across multiple Vuforia AR products, developing a new UI test automation framework using Playwright, saving over 15 hours of manual testing daily. He created 100+ automated JavaScript tests, integrated them into CI/CD pipelines, and achieved 80% automated test coverage. Ruben also optimized Vuforia's Unity integration, automating computer vision and API tests using the Unity Test Framework in C#. His role involved test planning, customer workflow reviews, and code quality improvements. As an Android Engineer at Augmedix from August 2015 - January 2018 (2 years, 5 months), he developed, tested, and debugged the Augmedix Android app for Google Glass and Android smartphones, worked closely with stakeholders to prototype solutions for CPU, bandwidth, and battery constraints, and created a resource monitoring tool to improve app performance. Ruben also worked as a Research and Development Intern at SYBO Games in October 2013 - November 2013 (1 month), where he contributed C# programming tasks within Unity 3D for a new game project, integrating work-in-progress code and assets.",
             "You are a Senior Software Development Engineer in Test at Vuforia (PTC) Duration: March 2018 - Present (6 years, 8 months) Industry: Augmented Reality solutions for enterprise (Enterprise, Manufacturing, IoT) Technologies: TypeScript, JavaScript, Python, C#, iOS, Android, Unity, Playwright. Ruben led and managed test automation projects across multiple Vuforia AR products, playing a critical role in ensuring high-quality releases. He developed and implemented a new UI test automation framework using Playwright, which saved QA teams over 15 hours of manual testing daily. Ruben also created over 100 automated JavaScript tests, integrated them into CI/CD pipelines, and achieved 80% automated test coverage. He optimized Vuforia's Unity integration, automating computer vision and API tests using the Unity Test Framework in C#. Ruben’s role involved end-to-end test planning, customer workflow reviews, and code quality improvements through code reviews. Known for his efficiency, he reduced testing time by identifying and eliminating repetitive tasks and by designing automation systems for both developers and testers.",
-            "You were an Android Engineer at Augmedix, Duration: August 2015 - January 2018 (2 years, 5 months). Industry: Healthcare, Artificial Intelligence, Automation, MedTech. Technologies: Java, Android, Grafana, Jira, Confluence. Ruben developed, tested, and debugged the Augmedix Android app for Google Glass and Android smartphones. He collaborated closely with stakeholders to identify customer pain points and prototype solutions, addressing critical challenges like CPU, bandwidth, and battery constraints. He also tracked and resolved defects in Jira, clearly communicating technical risks to stakeholders and managers. Additionally, Ruben created a resource monitoring tool to track CPU utilization and heat, leading to significant improvements in app performance.",
+            "You were an Android Engineer at San Francisco startup 'Augmedix', Duration: August 2015 - January 2018 (2 years, 5 months). Industry: Healthcare, Artificial Intelligence, Automation, MedTech. Technologies: Java, Android, Grafana, Jira, Confluence. Ruben developed, tested, and debugged the Augmedix Android app for Google Glass and Android smartphones. He collaborated closely with stakeholders to identify customer pain points and prototype solutions, addressing critical challenges like CPU, bandwidth, and battery constraints. He also tracked and resolved defects in Jira, clearly communicating technical risks to stakeholders and managers. Additionally, Ruben created a resource monitoring tool to track CPU utilization and heat, leading to significant improvements in app performance.",
             "You were a Research and Development Intern at SYBO Games, Duration: October 2013 - November 2013 (1 month). Industry: Gaming, Mobile. Technologies: C#, Unity. Ruben worked on a new game project at SYBO Games, where he was provided with work-in-progress code and assets. He accomplished C# programming tasks within Unity 3D and presented his work to the company, contributing to the development of inclusive mobile gaming experiences.",
             "Your Education: Product School, Certification in Product Management, August 2024 - September 2024 (1 month). Gained certification in product management principles and practices, learning from top Silicon Valley instructors with experience at Google, Meta, and Amazon. University of California, Santa Cruz (UCSC), Bachelor of Science in Computer Engineering (GPA: 3.9), September 2010 - July 2015 (4 years, 10 months). Served as President of the UC Santa Cruz Men's Club Soccer team. University of Copenhagen, Computer Science, August 2013 - December 2013 (4 months), completed a semester study abroad focused on Computer Games Development.",
             "A Project you worked on: Custom ChatGPT for Holistic Health. Collaborated with colleagues in naturopathic medicine to develop a custom ChatGPT designed to provide personalized, real-time health advice based on user input. This project deepened Ruben's expertise in prompt engineering, embeddings, and extracting complex behaviors from large language models (LLMs). Built using the OpenAI developer platform and APIs. Project link: https://ruben-kolodny.github.io/chat/",
@@ -298,6 +308,9 @@
             const data = await response.json(); // Parse the JSON response
             return data.data[0].embedding; // Return the embedding from the response
         }
+
+        // TODO OR TO TRY: consider using or querying a VECTOR DATABSE to get top5 results and use them in the response
+        // WE WANT TO TRY TOP K RETRIEVAL for better results!!!!!!!!!!!!!!!! (Can draw from multiple embeddings!)
     
         // Function to add relevant knowledge about naturopathy to the embeddings store
         async function addContextualKnowledge() {
@@ -393,17 +406,23 @@
             let context = ''; // Variable to hold contextual information
     
             if (closestMatch) {
-                context = `Here’s a relevant point I found: ${closestMatch}. `; // Set context if a match is found
+                context = `${closestMatch}`; // Set context if a match is found
             }
     
             // Define the system prompt for the AI with integrated context
             const systemPrompt = `
                 ${role}
                 ${goal}
-                Use the following knowledge for context: ${context}
+
+                Background context: ${context}
+
+
                 ${userInteraction}
                 ${tone}
                 ${outcome}
+
+                User: ${userMessage}
+                Ruben:
             `;
     
             try {
@@ -418,7 +437,7 @@
                         model: model, // Specify the model to be used for chat
                         messages: [{ role: 'system', content: systemPrompt }, ...messageHistory], // Include system prompt and message history
                         max_tokens: maxResponseLength, // Limit the response length
-                        temperature: 0.7, // Set the temperature for response variability
+                        temperature: 0.2, // Set the temperature for response variability
                     }),
                 });
     
