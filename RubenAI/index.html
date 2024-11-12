@@ -38,6 +38,44 @@
             transform: translateY(0);
         }
     }
+    /* Container for image and text */
+    .profile-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px; /* Space between image and text */
+      animation: fadeInLeft 1s ease forwards; /* Animation for header text */
+      margin-bottom: 50px;
+    }
+
+    /* Style to make the image circular with a border */
+    .circular-image {
+      width: 100px; /* Adjust size as needed */
+      height: 100px; /* Same as width to keep it circular */
+      border-radius: 50%; /* Makes the image circular */
+      object-fit: cover; /* Ensures the image scales correctly */
+    }
+
+    /* Styling for the text */
+    .profile-text {
+    display: flex;
+    flex-direction: column;
+    }
+
+    .profile-title {
+      font-weight: bold;
+      font-size: 1.2em; /* Adjust font size as needed */
+    }
+
+    .profile-subtitle {
+      color: #666; /* Lighter color for subtitle */
+      font-size: 0.9em;
+    }
+
+    .profile-subtext {
+      color: #999; /* Even lighter color for additional subtext */
+      font-size: 0.8em; /* Smaller font size for subtext */
+    }
 
     /* Styling for the header text */
     .header-text {
@@ -155,7 +193,7 @@
 
     .submit-button {
         padding: 12px;
-        background-color: #007BFF;
+        background-color: lightgray;
         color: white;
         border: none;
         border-radius: 5px;
@@ -166,7 +204,7 @@
     }
 
     .submit-button:hover {
-        background-color: #0056b3;
+        background-color: darkgray;
     }
 
     #typingGif {
@@ -221,11 +259,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script> <!-- pdf extraction -->
 </head>
 <body>
-    <div class="header-text">
-        <h1>
-            Ruben AI<br>
-        </h1>
+
+  <div class="profile-container">
+    <!-- Circular image -->
+    <img src="https://media.licdn.com/dms/image/v2/C5603AQGLefGIiH_cFw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1522107996923?e=1736985600&v=beta&t=BWra8xlEKF0TQyShfKAn8pr_Fg5I-Gcg4traSw-W0rU" 
+         alt="Profile Picture" class="circular-image">
+    
+    <!-- Text next to the image -->
+    <div class="profile-text">
+      <div class="profile-title">Ruben K. Lopez</div>
+      <div class="profile-subtitle">Senior Software Engineer</div>
+      <div class="profile-subtext">Automation and AI</div>
     </div>
+  </div>
     <div id="chatContainer"> <!-- Main container for the chat interface -->
         <div id="conversation"> <!-- Area to display chat messages -->
             <!-- Hidden GIF embed -->
