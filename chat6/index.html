@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Set character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensure proper rendering on mobile devices -->
+    <title>Chat</title> <!-- Title of the webpage -->
+    <style>
+    /* Basic styling for the body */
+    body {
+        font-family: 'Times New Roman', serif; /* Classic serif font */
+        background-color: #fef9ef; /* Light tan/sand background */
+        color: #4b3f35; /* Brownish text color */
+        margin: 0;
+        padding: 0;
+    }
+
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInBottom {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Styling for the header text */
+    .header-text {
+        text-align: center; /* Center align the text */
+        font-family: 'Times New Roman', serif; /* Use Times New Roman font */
+        margin-top: 50px; /* Add some top margin */
+    }
+
+    .header-text h1 {
+        font-size: 52px; /* Large text size */
+        color: inherit; /* Default text color */
+        line-height: 1.2; /* Adjust line height for better spacing */
+        font-weight: normal; /* Remove boldness */
+        animation: fadeInLeft 1s ease forwards; /* Animation for header text */
+    }
+
+    .header-text .highlight-text {
+        display: block; /* Ensure it appears on a new line */
+        color: #c07858; /* Brownish-orange color */
+        font-style: italic; /* Italicize the text */
+    }
+
+    /* Styling for the h2 subtext */
+    .subtext {
+        text-align: center; /* Center align the text */
+        font-family: 'Eloquia', sans-serif; /* Use Eloquia Light or a similar font */
+        font-size: 32px; /* Adjust size to be smaller than h1 */
+        margin-top: 20px; /* Add some top margin */
+        font-weight: lighter; /* Light weight for the text */
+        color: #7f6a55; /* Muted brown color */
+    }
+
+    /* Apply fade-in animation to subtext */
+    .subtext {
+        animation: fadeInBottom 1s ease forwards;
+        animation-delay: 1s; /* Delay for subtext */
+        opacity: 0; /* Start with hidden */
+    }
+
+    /* Styling for hyperlinks */
+    a {
+        color: #c07858; /* Brownish-orange accent color for links */
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* Styling for the chat container */
+    #chatContainer {
+        animation: fadeInBottom 1s ease forwards;
+        animation-delay: 1s; /* Delay */
+        opacity: 0; /* Start with hidden */
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 30px;
+        border-radius: 16px;
+        background-color: #ffffff; /* white background */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        border: 2px solid #ffffff;
+    }
+
+    /* Styling for the conversation area */
+    #conversation {
+        height: 450px;
+        overflow-y: auto;
+        padding: 20px;
+        border: 1px solid #ffffff; 
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+
+    /* Styling for user input field */
+    #userInput {
+        width: calc(100% - 22px);
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid #f2f2f2; 
+        background-color: #ffffff;
+        color: #4b3f35;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+
+    }
+
+    /* Change border color when the input field is focused */
+    #userInput:focus {
+        border-color: #c07858; /* Change to brownish-orange when focused */
+        outline: none; /* Remove default blue outline */
+    }
+
+    /* Button styling */
+    button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 25px;
+        background-color: #c07858; /* Brownish-orange background */
+        color: white;
+        cursor: pointer;
+        margin-top: 12px;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background-color: #9b5f46; /* Darker brownish-orange on hover */
+    }
+
+    /* Styling for bot messages */
+    .bot-message {
+        color: #4b3f35; /* Dark brown text */
+        padding: 12px;
+        border-radius: 20px;
+        margin-bottom: 12px;
+        background-color: #f2f2f2; /* Light gray background for bot messages */
+        max-width: 75%;
+    }
+
+    /* Styling for user messages */
+    .user-message {
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 20px;
+        margin-bottom: 12px;
+        background-color: #c07858; /* Brownish-orange background for user messages */
+        max-width: 75%;
+        text-align: right;
+        margin-left: auto;
+    }
+
+    /* Style for system parameters */
+    #systemParameters {
+        animation: fadeInBottom 1s ease forwards;
+        animation-delay: 1s; /* Delay */
+        opacity: 0; /* Start with hidden */
+        color: #7f6a55; /* Muted brown color */
+        font-size: 14px;
+        margin-top: 24px;
+        margin-left: 65px;
+        margin-right: 65px;
+    }
+
+
+       
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Include Marked.js for markdown parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script> <!-- pdf extraction -->
+</head>
+<body>
+    <div class="header-text">
+        <h1>
+            Holistic insights for a<br>
+            <span class="highlight-text">healthier you.</span>
+        </h1>
+    </div>
+    <h2 class="subtext">
+        Discover wellness with<br>
+        evidence-based natural medicine.
+    </h2>
+    
+    <div id="chatContainer"> <!-- Main container for the chat interface -->
+        <div id="conversation"></div> <!-- Area to display chat messages -->
+        <input type="text" id="userInput" placeholder="Type your message..." /> <!-- Input field for user messages -->
+        <button onclick="sendMessage()">Send</button> <!-- Button to send messages -->
+    </div>
+    <div id="systemParameters"></div> <!-- Placeholder for system parameters -->
+
+    <script>
+        // Define the API key by concatenating parts
+        const part1 = 'sk-proj-CWOugFnl367iRKm7CIt-'; 
+        const part2 = 'tasPsvvhG6tq4uQxAunzc7DAarFLD5hicbPoVrT3BlbkFJuSZszq8GvISOV0Py8Go16vRDGzZfxjPYNEJMq_';
+        const part3 = 'CJx1lNTN96RA8UGCAQEA';
+        const apiKey = part1 + part2 + part3; // Complete API key for authentication
+    
+        const messageHistory = []; // Array to hold the history of messages exchanged
+        let embeddingsStore = []; // Array to store embeddings for contextual knowledge
+
+        const model = "gpt-3.5-turbo";
+        const maxResponseLength = 1000; // measured in tokens
+
+        // Build the system prompt with the following components:
+        const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness.`
+        const goal = `Your goal is to give personalized health consultations, as if you are their healthcare provider or doctor.`
+        const userInteraction = `Based on the user's input, provide clear answers and actionable, tailored treatment suggestions.`
+        const tone = `Use a compassionate and empathetic tone, guiding users towards holistic health solutions that consider their physical, emotional, and environmental well-being.` 
+        const outcome = `Always aim to empower users with knowledge and actionable steps they can take towards achieving their wellness goals.`
+
+        // knowledge base (foundational concepts from Dr. Mark Hyman)
+        const concepts = [
+                "Eat whole, real food: Focus on vegetables, healthy fats, clean proteins, and fiber-rich carbs. Ditch the processed, sugary foods that fuel inflammation and disease",
+                "Move daily: Exercise doesn't have to be complicated - just get moving! Aim for 30 minutes of walking, strength training, or yoga each day to support heart, muscles, and brain",
+                "Manage stress: Chronic stress drives inflammation and hormonal imbalances. Simple practices like meditation, deep breathing or even spending time in nature can do wonders for calming your mind and body",
+                "Prioritize sleep: Sleep is when your body heals and regenerates. Aim for 7-8 hours of quality sleep each night to support your immune system, brain, and metabolism",
+                "Reduce toxins: From the air we breath to the food we eat, toxins are everywhere. Start by switching to non-toxic cleaning products and reducing plastic use, and choose organic foods when possible",
+                "Ruben Lopez is the author who programmed this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/ "
+        ];
+    
+        // Function to fetch embeddings for a given text input using OpenAI API
+        async function fetchEmbedding(text) {
+            const response = await fetch('https://api.openai.com/v1/embeddings', {
+                method: 'POST', // Specify POST method
+                headers: {
+                    'Content-Type': 'application/json', // Set content type to JSON
+                    'Authorization': `Bearer ${apiKey}`, // Include API key in authorization
+                },
+                body: JSON.stringify({
+                    model: 'text-embedding-ada-002', // Specify the model to be used for embeddings
+                    input: text, // Input text for which the embedding is to be fetched
+                }),
+            });
+    
+            const data = await response.json(); // Parse the JSON response
+            return data.data[0].embedding; // Return the embedding from the response
+        }
+    
+        // Function to add relevant knowledge about naturopathy to the embeddings store
+        async function addContextualKnowledge() {
+            // Loop through each concept to fetch its embedding and store it
+            for (const concept of concepts) {
+                const embedding = await fetchEmbedding(concept); // Get embedding for each concept
+                embeddingsStore.push({ text: concept, embedding }); // Store the concept and its embedding
+            }
+        }
+        
+        async function addPDFKnowledge() {
+            const pdfPages = await extractTextFromPDF("https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf");
+
+            for (let pageNum = 0; pageNum < pdfPages.length; pageNum++) {
+                const pageText = pdfPages[pageNum]; // Get text for the current page
+                const embedding = await fetchEmbedding(pageText); // Get embedding for the current page text
+                
+                // Store the text and its embedding in the embeddings store
+                embeddingsStore.push({ 
+                    text: pageText, 
+                    embedding,
+                    page: pageNum + 1 // Store the page number (1-based index)
+                }); 
+            }
+            
+            console.log('Knowledge added for all PDF pages.');
+        }
+    
+        // Function to calculate cosine similarity between two vectors (embeddings)
+        function cosineSimilarity(vecA, vecB) {
+            const dotProduct = vecA.reduce((acc, value, i) => acc + value * vecB[i], 0); // Calculate dot product
+            const magnitudeA = Math.sqrt(vecA.reduce((acc, value) => acc + value ** 2, 0)); // Calculate magnitude of vector A
+            const magnitudeB = Math.sqrt(vecB.reduce((acc, value) => acc + value ** 2, 0)); // Calculate magnitude of vector B
+            return dotProduct / (magnitudeA * magnitudeB); // Return cosine similarity
+        }
+    
+        // Function to find the closest matching embedding for a user's message
+        async function findClosestEmbedding(userMessage) {
+            const userEmbedding = await fetchEmbedding(userMessage); // Get embedding for the user message
+            let closestMatch = null; // Variable to store the closest matching concept
+            let highestSimilarity = -1; // Initialize highest similarity score
+    
+            // Loop through stored embeddings to find the closest match
+            embeddingsStore.forEach(({ text, embedding }) => {
+                const similarity = cosineSimilarity(userEmbedding, embedding); // Calculate similarity
+                if (similarity > highestSimilarity) { // If this match is better than the previous best
+                    highestSimilarity = similarity; // Update highest similarity score
+                    closestMatch = text; // Update closest match
+                }
+            });
+    
+            return closestMatch; // Return the closest matching text
+        }
+    
+        // Function to send a message and get a response from the chatbot
+        async function sendMessage() {
+            const userMessage = document.getElementById('userInput').value; // Get user input
+            const conversation = document.getElementById('conversation'); // Get the conversation element
+    
+            // Add user's message to the conversation
+            conversation.innerHTML += `<p class="user-message">${userMessage}</p>`;
+            conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom of the conversation
+    
+            // Clear the input field
+            document.getElementById('userInput').value = '';
+    
+            // Add the user's message to the message history
+            messageHistory.push({ role: "user", content: userMessage });
+    
+            // Find the closest embedding match for the user message
+            const closestMatch = await findClosestEmbedding(userMessage);
+            let context = ''; // Variable to hold contextual information
+    
+            if (closestMatch) {
+                context = `Here’s a relevant point I found: ${closestMatch}. `; // Set context if a match is found
+            }
+    
+            // Define the system prompt for the AI with integrated context
+            const systemPrompt = `
+                ${role}
+                ${goal}
+                Use the following knowledge for context: ${context}
+                ${userInteraction}
+                ${tone}
+                ${outcome}
+            `;
+    
+            try {
+                // Send request to OpenAI API for chat completion
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST', // Specify POST method
+                    headers: {
+                        'Content-Type': 'application/json', // Set content type to JSON
+                        'Authorization': `Bearer ${apiKey}`, // Include API key in authorization
+                    },
+                    body: JSON.stringify({
+                        model: model, // Specify the model to be used for chat
+                        messages: [{ role: 'system', content: systemPrompt }, ...messageHistory], // Include system prompt and message history
+                        max_tokens: maxResponseLength, // Limit the response length
+                        temperature: 0.7, // Set the temperature for response variability
+                    }),
+                });
+    
+                const data = await response.json(); // Parse the JSON response
+                const botMessage = data.choices[0].message.content; // Extract the chatbot's message
+    
+                messageHistory.push({ role: "assistant", content: botMessage }); // Add bot's message to history
+                streamBotResponse(botMessage); // Call function to display bot's response
+            } catch (error) {
+                console.error(error); // Log any errors to the console
+                // Display error message in the conversation
+                conversation.innerHTML += `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+                conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom of the conversation
+            }
+
+            // Update display of system parameters after each message
+            displaySystemParameters(systemPrompt, context);
+        }
+    
+        // Function to stream the bot's response character by character
+        function streamBotResponse(message) {
+            const conversation = document.getElementById('conversation'); // Get conversation element
+            let index = 0; // Initialize index for streaming
+    
+            // Create a new div for the bot message
+            const botMessageElement = document.createElement('div');
+            botMessageElement.classList.add('bot-message'); // Assign class for styling
+            conversation.appendChild(botMessageElement); // Add bot message element to conversation
+            conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom
+    
+            // Interval to display the message gradually
+            const interval = setInterval(() => {
+                if (index < message.length) { // While there are more characters to display
+                    const partialMessage = message.slice(0, index + 1); // Get the current portion of the message
+                    botMessageElement.innerHTML = marked.parse(partialMessage); // Update the bot message element
+                    index++; // Move to the next character
+                } else {
+                    clearInterval(interval); // Stop the interval when the message is fully displayed
+                }
+            }, 20); // Set interval timing
+        }
+    
+        // Add event listener to send message when Enter key is pressed
+        document.getElementById('userInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') { // Check if Enter key was pressed
+                sendMessage(); // Call sendMessage function
+            }
+        });
+    
+        // Initialize the embeddings store by adding some knowledge
+        addContextualKnowledge(); // Call the function to populate the embeddings store with contextual knowledge
+        //addPDFKnowledge(); // Call the function to popupulate the embeddings store with pages of PDF
+
+        // build initial prompt
+        let initialPrompt = `
+            ${role}
+            ${goal}
+            ${userInteraction}
+            ${tone}
+            ${outcome}
+        `;
+
+        // Initial display of parameters
+        displaySystemParameters(initialPrompt, "");
+
+        function displaySystemParameters(systemPrompt, context) {
+            const systemParametersDiv = document.getElementById('systemParameters');
+            systemParametersDiv.innerHTML = `
+                <p><strong>Model:</strong> ${model}</p>
+                <p><strong>Max Response Length:</strong> ${maxResponseLength} tokens</p>
+                <p><strong>System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${systemPrompt.trim()}</p>
+                <p><strong>Closest Knowledge Match:</strong> ${context.trim()}</p>
+                <p><strong>Contextual Knowledge:</strong> ${concepts.join(", ")}</p>
+            `;
+        }
+
+        // Automatically send a greeting message after the page loads (2 seconds in)
+        window.onload = () => setTimeout(() => {
+            streamBotResponse("What health concerns or questions do you have in mind today?")
+        }, 2000);
+
+
+        async function extractTextFromPDF(pdfUrl) {
+            // Set the worker source
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+            
+            console.log('Loading PDF document...'); // Debug statement
+
+            const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+            console.log('PDF loaded, number of pages:', pdf.numPages); // Debug statement
+
+            let extractedTextByPage = []; // Array to hold text for each page
+            const pdfName = pdfUrl.split('/').pop(); // Extract the PDF name from the URL
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                console.log(`Extracting text from page ${pageNum}...`); // Debug statement
+                const page = await pdf.getPage(pageNum);
+                const textContent = await page.getTextContent();
+                
+                let pageText = ''; // String to hold text for the current page
+
+                textContent.items.forEach(item => {
+                    pageText += item.str + ' ';
+                });
+                
+                // Prepend PDF name and page number
+                const pageIdentifier = `${pdfName}, page ${pageNum}: `;
+                extractedTextByPage.push(pageIdentifier + pageText.trim()); // Add the page text to the array
+                // console.log(extractedTextByPage[extractedTextByPage.length - 1]);
+                console.log(`Page ${pageNum} extracted, current text length: ${pageText.length}`); // Debug statement
+            }
+
+            console.log('Text extraction complete, total pages:', extractedTextByPage.length); // Debug statement
+            return extractedTextByPage; // Return the array of texts for each page
+        }
+            
+    </script>
+</body>
+</html>

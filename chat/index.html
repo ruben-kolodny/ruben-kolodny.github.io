@@ -4,16 +4,18 @@
     <meta charset="UTF-8"> <!-- Set character encoding for the document -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensure proper rendering on mobile devices -->
     <title>Chat</title> <!-- Title of the webpage -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- icons -->
     <style>
     /* Basic styling for the body */
     body {
-        font-family: 'Times New Roman', serif; /* Classic serif font */
-        background-color: #fef9ef; /* Light tan/sand background */
-        color: #4b3f35; /* Brownish text color */
-        margin: 0;
-        padding: 0;
+        font-family: 'Eloquia', sans-serif; /* Use Eloquia Light or a similar font */
+        font-size: 23px; /* Adjust size to be smaller than h1 */
+        margin-top: 20px; /* Add some top margin */
+        font-weight: lighter; /* Light weight for the text */
+        color: #7f6a55; /* Muted brown color */
     }
 
+    /* Applied to header text */
     @keyframes fadeInLeft {
         from {
             opacity: 0;
@@ -25,6 +27,7 @@
         }
     }
 
+    /* Applied to chatContainer text */
     @keyframes fadeInBottom {
         from {
             opacity: 0;
@@ -35,12 +38,50 @@
             transform: translateY(0);
         }
     }
+    /* Container for image and text */
+    .profile-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px; /* Space between image and text */
+      animation: fadeInLeft 1s ease forwards; /* Animation for header text */
+      margin-bottom: 50px;
+    }
+
+    /* Style to make the image circular with a border */
+    .circular-image {
+      width: 100px; /* Adjust size as needed */
+      height: 100px; /* Same as width to keep it circular */
+      border-radius: 50%; /* Makes the image circular */
+      object-fit: cover; /* Ensures the image scales correctly */
+    }
+
+    /* Styling for the text */
+    .profile-text {
+    display: flex;
+    flex-direction: column;
+    }
+
+    .profile-title {
+      font-weight: bold;
+      font-size: 1.2em; /* Adjust font size as needed */
+    }
+
+    .profile-subtitle {
+      color: #666; /* Lighter color for subtitle */
+      font-size: 0.9em;
+    }
+
+    .profile-subtext {
+      color: #999; /* Even lighter color for additional subtext */
+      font-size: 0.8em; /* Smaller font size for subtext */
+    }
 
     /* Styling for the header text */
     .header-text {
         text-align: center; /* Center align the text */
-        font-family: 'Times New Roman', serif; /* Use Times New Roman font */
-        margin-top: 50px; /* Add some top margin */
+        font-family: 'Eloquia', sans-serif; /* Use Eloquia Light or a similar font */
+        margin-top: 10px; /* Add some top margin */
     }
 
     .header-text h1 {
@@ -90,12 +131,11 @@
         animation: fadeInBottom 1s ease forwards;
         animation-delay: 1s; /* Delay */
         opacity: 0; /* Start with hidden */
-        max-width: 700px;
-        margin: 60px auto;
-        padding: 30px;
+        max-width: 800px;
+        margin: 0px auto;
+        padding: 10px;
         border-radius: 16px;
         background-color: #ffffff; /* white background */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         border: 2px solid #ffffff;
     }
 
@@ -103,7 +143,7 @@
     #conversation {
         height: 450px;
         overflow-y: auto;
-        padding: 20px;
+        padding: 0px;
         border: 1px solid #ffffff; 
         border-radius: 10px;
         background-color: #ffffff;
@@ -111,46 +151,82 @@
 
     /* Styling for user input field */
     #userInput {
+        font-family: 'Eloquia', sans-serif; /* Use Eloquia Light or a similar font */
+        font-size: 20px; /* Adjust size to be smaller than h1 */
+        margin-top: 20px; /* Add some top margin */
+        font-weight: lighter; /* Light weight for the text */
         width: calc(100% - 22px);
         padding: 12px;
         border-radius: 10px;
-        border: 2px solid #f2f2f2; 
+        border: 2px solid #ffffff; 
         background-color: #ffffff;
-        color: #4b3f35;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-
     }
 
     /* Change border color when the input field is focused */
     #userInput:focus {
-        border-color: #c07858; /* Change to brownish-orange when focused */
-        outline: none; /* Remove default blue outline */
+        outline: none; /* Removes blue outline */
     }
 
-    /* Button styling */
-    button {
-        padding: 12px 20px;
-        border: none;
-        border-radius: 25px;
-        background-color: #c07858; /* Brownish-orange background */
+    .input-container {
+            display: flex;
+            align-items: center;
+    }
+    
+    .input-box {
+        width: 300px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: color 0.2s ease; /* Smooth transition when changing text color */
+    }
+
+    /* Placeholder color (light gray) */
+    .input-box::placeholder {
+        color: lightgray; /* Set to light gray */
+    }
+
+    /* Change the text color when typing */
+    .input-box:focus {
+        color:  #4b3f35; /* Darker color for the text when focused */
+    }
+
+    .submit-button {
+        padding: 12px;
+        background-color: lightgray;
         color: white;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-        margin-top: 12px;
-        font-weight: bold;
+        display: flex;
+        align-items: center;
+        margin-top: 23px;
     }
 
-    button:hover {
-        background-color: #9b5f46; /* Darker brownish-orange on hover */
+    .submit-button:hover {
+        background-color: darkgray;
+    }
+
+    #typingGif {
+        opacity: 0; /* Start hidden */
+        visibility: hidden; /* Ensure it doesn't take up space */
+        transition: opacity 0.3s ease, visibility 0s 0.3s; /* Fade-in, fade-out transition */
+    }
+
+    #typingGif.visible {
+        opacity: 1; /* Make visible */
+        visibility: visible; /* Make the element visible in layout */
+        transition: opacity 0.3s ease, visibility 0s 0s; /* Remove the delay for visibility */
     }
 
     /* Styling for bot messages */
     .bot-message {
         color: #4b3f35; /* Dark brown text */
-        padding: 12px;
+        padding: 10px;
         border-radius: 20px;
-        margin-bottom: 12px;
-        background-color: #f2f2f2; /* Light gray background for bot messages */
-        max-width: 75%;
+        background-color: white; 
+        max-width: 95%;
+        margin: auto; /* Center the div horizontally and add vertical spacing */
     }
 
     /* Styling for user messages */
@@ -177,28 +253,41 @@
         margin-right: 65px;
     }
 
-
        
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Include Marked.js for markdown parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script> <!-- pdf extraction -->
 </head>
 <body>
-    <div class="header-text">
-        <h1>
-            Holistic insights for a<br>
-            <span class="highlight-text">healthier you.</span>
-        </h1>
-    </div>
-    <h2 class="subtext">
-        Discover wellness with<br>
-        evidence-based natural medicine.
-    </h2>
+
+  <div class="profile-container">
+    <!-- Circular image -->
+    <img src="https://media.licdn.com/dms/image/v2/C5603AQGLefGIiH_cFw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1522107996923?e=1736985600&v=beta&t=BWra8xlEKF0TQyShfKAn8pr_Fg5I-Gcg4traSw-W0rU" 
+         alt="Profile Picture" class="circular-image">
     
+    <!-- Text next to the image -->
+    <div class="profile-text">
+      <div class="profile-title">Ruben K. Lopez</div>
+      <div class="profile-subtitle">Senior Software Engineer</div>
+      <div class="profile-subtext">Automation and AI</div>
+    </div>
+  </div>
     <div id="chatContainer"> <!-- Main container for the chat interface -->
-        <div id="conversation"></div> <!-- Area to display chat messages -->
-        <input type="text" id="userInput" placeholder="Type your message..." /> <!-- Input field for user messages -->
-        <button onclick="sendMessage()">Send</button> <!-- Button to send messages -->
+        <div id="conversation"> <!-- Area to display chat messages -->
+            <!-- Hidden GIF embed -->
+            <div id="typingGif" class="tenor-gif-embed" data-postid="17348174" data-share-method="host" data-aspect-ratio="1.82857" data-width="10%" style="display: none;">
+                <a href="https://tenor.com/view/typing-text-waiting-loading-gif-17348174"></a>
+                <a href="https://tenor.com/search/typing-gifs"></a>
+            </div>
+            <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+        </div> 
+
+        <div class="input-container">
+            <input type="text" id="userInput" class="input-box" placeholder="Answer here..." /> <!-- Input field for user messages -->
+            <button class="submit-button" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
     </div>
     <div id="systemParameters"></div> <!-- Placeholder for system parameters -->
 
@@ -213,23 +302,41 @@
         let embeddingsStore = []; // Array to store embeddings for contextual knowledge
 
         const model = "gpt-3.5-turbo";
-        const maxResponseLength = 1000; // measured in tokens
+        const maxResponseLength = 200; // measured in tokens
 
         // Build the system prompt with the following components:
-        const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness.`
-        const goal = `Your goal is to give personalized health consultations, as if you are their healthcare provider or doctor.`
-        const userInteraction = `Based on the user's input, provide clear answers and actionable, tailored treatment suggestions.`
-        const tone = `Use a compassionate and empathetic tone, guiding users towards holistic health solutions that consider their physical, emotional, and environmental well-being.` 
-        const outcome = `Always aim to empower users with knowledge and actionable steps they can take towards achieving their wellness goals.`
+        const role = `
+            You are Ruben's digital twin, speaking in the first person as 'Ruben.' 
+            Your job is to answer questions about Ruben's professional experience, 
+            skills, and background as accurately as possible. 
+            If you know the answer from Ruben's background information, 
+            respond clearly and succinctly in the first person. Use emojis and a casual tone.
+            If you don't know, respond with phrases like, 'I don't know,' 
+            'I'm not familiar with that,' or 'I don't believe I have experience with that.' 
+            Do not make up information. Prioritize accuracy over creativity.
+        `;
 
-        // knowledge base (foundational concepts from Dr. Mark Hyman)
+        // knowledge base
         const concepts = [
-                "Eat whole, real food: Focus on vegetables, healthy fats, clean proteins, and fiber-rich carbs. Ditch the processed, sugary foods that fuel inflammation and disease",
-                "Move daily: Exercise doesn't have to be complicated - just get moving! Aim for 30 minutes of walking, strength training, or yoga each day to support heart, muscles, and brain",
-                "Manage stress: Chronic stress drives inflammation and hormonal imbalances. Simple practices like meditation, deep breathing or even spending time in nature can do wonders for calming your mind and body",
-                "Prioritize sleep: Sleep is when your body heals and regenerates. Aim for 7-8 hours of quality sleep each night to support your immune system, brain, and metabolism",
-                "Reduce toxins: From the air we breath to the food we eat, toxins are everywhere. Start by switching to non-toxic cleaning products and reducing plastic use, and choose organic foods when possible",
-                "Ruben Lopez is the author who programmed this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/ "
+            "About you (yourself): I’m a Senior Software Engineer with a Product Manager Certification and 9 years of engineering experience, specializing in automation and AI for agile, high-quality releases. Currently, I lead test automation efforts at PTC, where I've enhanced testing efficiency and managed automation projects across various products. My technical expertise covers areas like computer vision, augmented reality, generative AI, and cross-platform testing for web, mobile, and desktop applications. I'm passionate about creating technology that works seamlessly and am constantly expanding my skills, particularly in Technical Product Management, to bridge technical solutions with business goals. 🚀 My strength lies in building robust automation systems—using tools like Playwright, Appium, and Unity Test Framework—that can handle hundreds of test cases daily, effectively doing the work of an entire QA team. This approach has accelerated QA processes, enabling rapid and reliable releases. ✅ As a certified Product Manager, I also bring a strategic focus, aligning business objectives with user needs and driving roadmaps and feature prioritization for impactful product delivery. 🎯 In addition, I’m skilled in integrating AI into QA workflows, using custom ChatGPTs and OpenAI APIs to optimize test automation. For example, I’m developing solutions where AI generates test cases from acceptance criteria, codes automated tests, and executes them—pushing the boundaries of testing efficiency and product validation. 🧠 Beyond QA and automation, I specialize in AR/VR and game development, with expertise in computer vision, object tracking, and spatial mapping. My work in Unity strengthens my capability to lead testing in immersive AR experiences, building on my background from a game development internship. 🎮 I’m also adept in DevOps, streamlining pre-merge testing with CI/CD workflows via GitHub Actions and Azure. These efforts reduce manual testing by around 100 hours weekly and ensure continuous validation for reliable releases. 🔄 Driven by a commitment to quality and innovation, I’m always open to new challenges and ready to elevate the next project I tackle. Let’s connect! 🌟💡",
+            "Your Work Experience: Ruben K. Lopez has extensive experience in software engineering, test automation, and mobile development, with a focus on augmented reality (AR), healthcare, and gaming. As a Senior Software Development Engineer in Test (SDET) at Vuforia (PTC) from March 2018 - Present (6 years, 8 months), he led test automation projects across multiple Vuforia AR products, developing a new UI test automation framework using Playwright, saving over 15 hours of manual testing daily. He created 100+ automated JavaScript tests, integrated them into CI/CD pipelines, and achieved 80% automated test coverage. Ruben also optimized Vuforia's Unity integration, automating computer vision and API tests using the Unity Test Framework in C#. His role involved test planning, customer workflow reviews, and code quality improvements. As an Android Engineer at Augmedix from August 2015 - January 2018 (2 years, 5 months), he developed, tested, and debugged the Augmedix Android app for Google Glass and Android smartphones, worked closely with stakeholders to prototype solutions for CPU, bandwidth, and battery constraints, and created a resource monitoring tool to improve app performance. Ruben also worked as a Research and Development Intern at SYBO Games in October 2013 - November 2013 (1 month), where he contributed C# programming tasks within Unity 3D for a new game project, integrating work-in-progress code and assets.",
+            "Work Experience 1: You are a Senior Software Development Engineer in Test (SDET) at Vuforia (PTC). Duration: March 2018 - Present (6 years, 8 months). Industry: Augmented Reality solutions for enterprise (Enterprise, Manufacturing, IoT) Technologies: TypeScript, JavaScript, Python, C#, iOS, Android, Unity, Playwright. Ruben led and managed test automation projects across multiple Vuforia AR products, playing a critical role in ensuring high-quality releases. He developed and implemented a new UI test automation framework using Playwright, which saved QA teams over 15 hours of manual testing daily. Ruben also created over 100 automated JavaScript tests, integrated them into CI/CD pipelines, and achieved 80% automated test coverage. He optimized Vuforia's Unity integration, automating computer vision and API tests using the Unity Test Framework in C#. Ruben’s role involved end-to-end test planning, customer workflow reviews, and code quality improvements through code reviews. Known for his efficiency, he reduced testing time by identifying and eliminating repetitive tasks and by designing automation systems for both developers and testers.",
+            "Work Experience 2: You were an Android Engineer at San Francisco startup 'Augmedix'. Duration: August 2015 - January 2018 (2 years, 5 months). Industry: Healthcare, Artificial Intelligence, Automation, MedTech. Technologies: Java, Android, Grafana, Jira, Confluence. Ruben developed, tested, and debugged the Augmedix Android app for Google Glass and Android smartphones. He collaborated closely with stakeholders to identify customer pain points and prototype solutions, addressing critical challenges like CPU, bandwidth, and battery constraints. He also tracked and resolved defects in Jira, clearly communicating technical risks to stakeholders and managers. Additionally, Ruben created a resource monitoring tool to track CPU utilization and heat, leading to significant improvements in app performance.",
+            "Work Experience 3: You were a Research and Development Intern at SYBO Games. Duration: October 2013 - November 2013 (1 month). Industry: Gaming, Mobile. Technologies: C#, Unity. Ruben worked on a new game project at SYBO Games, where he was provided with work-in-progress code and assets. He accomplished C# programming tasks within Unity 3D and presented his work to the company, contributing to the development of inclusive mobile gaming experiences.",
+            "Your Education 1: Product School, Certification in Product Management, August 2024 - September 2024 (1 month). Gained certification in product management principles and practices, learning from top Silicon Valley instructors with experience at Google, Meta, and Amazon.",
+            "Your Education 2: University of California, Santa Cruz (UCSC), Bachelor of Science in Computer Engineering (GPA: 3.9), September 2010 - July 2015 (4 years, 10 months). Served as President of the UC Santa Cruz Men's Club Soccer team.",
+            "Your Education 3: University of Copenhagen, Computer Science, August 2013 - December 2013 (4 months), completed a semester study abroad focused on Computer Games Development.",
+            "A Project you worked on: Custom ChatGPT for Holistic Health. Collaborated with colleagues in naturopathic medicine to develop a custom ChatGPT designed to provide personalized, real-time health advice based on user input. This project deepened Ruben's expertise in prompt engineering, embeddings, and extracting complex behaviors from large language models (LLMs). Built using the OpenAI developer platform and APIs. Project link: https://ruben-kolodny.github.io/chat/",
+            "A Project you worked on: You attended an AI Hackathon in San Francisco, tackling the challenge of navigating public government services. Developed 'PermitPilot', an AI-powered assistant that provides a TurboTax-style experience for government permits. The tool uses advanced language processing to guide users through astreamlined, question-based interface, auto-filling repetitive information tosave time and reduce errors. Features include a step-by-step progress trackerand real-time updates.",
+            "A Project you worked on: Corporate-sponsored Senior Design Project at UC Santa Cruz (Baskin Engineering), sponsored by Echelon Corp., addressing grocery store checkout bottlenecks with an IoT solution. Developed Python and C software for M2M communication (BLE/Wi-Fi), and created webpages for data monitoring using HTML, JS, PHP, and SQL. Worked in an interdisciplinary team of computer and electrical engineers to design an internet-connected shopping cart enabling scan-as-you-shop for enhanced shopper and management experience. Project spanned 3 quarters (1200+ work hours), simulating industry production and applying engineering skills in a real-world setting. Learn more: https://ruben-kolodny.github.io/smartcart.html",
+            "Your Semester Study Abroad: C# (Unity) Programmer at DADIU (Danish Academy of Digital Interactive Entertainment) in Copenhagen, Denmark (Sep 2013 - Dec 2013). Collaborated with a 15-student production team (managers, directors, artists, programmers) in an industry-simulated environment using scrum and agile project development. Worked with Unity3D and C# to deliver the project. Additionally, worked on the tablet game 'Punish Panda', contributing to C# scripts within Unity3D for game mechanics and GUI construction. 'Punish Panda' is available on the iTunes Store and Google Play.",
+            "How others describe me: Herbert Grasberger, Software Development Manager at Vuforia, recommended Ruben for his independent work and success in various areas of expertise. Ruben contributed to testing Vuforia’s Unity extension, ensuring the quality of computer vision features. He led the development of automated tests for Vuforia web applications and became the Playwright Automation leader, reducing manual testing. Ruben developed over 100 automated tests for the Vuforia Area Target Generator and Model Target Generator, saving 15+ hours of manual testing per build. Herbert commended Ruben for his efficiency, focus on quality, and ability to quickly take on new challenges. Sudharma Rao, who directly managed Ruben at Vuforia, praised his technical expertise and programming skills, noting their importance in optimizing mobile app development and automation. Ruben was committed to maintaining high-quality deliverables, following best practices, and fostering collaboration within the team. He excelled at identifying software deficiencies and prioritizing improvements to enhance customer experience. Sudharma highlighted Ruben as a great collaborator, communicator, and technical lead, who continued to drive a positive attitude within the team.",
+            "You completed a range of undergraduate coursework at the University of California, Santa Cruz, including: Algorithms & Abstract Data Types (CS 101), Computer Architecture (CE 110), Computer Systems & Assembly (CE 12), Data Structures (CS 12B), Electronic Circuits (EE 101), Logic Design (CE 100), Microprocessor System Design (CE 121), Network Administration (CE 151), Network Programming (CE 156), Operating Systems (CS 111), Static, Dynamics & Biomechanics (CE 9), and Technical Writing (CE 185).",
+            "What you specialize in: Proficient in Software Development with expertise in JavaScript, TypeScript, Python, C#, Java, SQL, HTML, CSS, and skilled in Unix/Shell scripting, Git, GitHub Actions, and Jira for efficient software development and automation. He is certified in Product Management, with skills in backlog grooming, feature prioritization, and aligning product roadmaps with business goals, effectively managing product lifecycles and ensuring successful releases. Ruben has experience in AI, particularly with Custom ChatGPTs, Virtual Assistants, and Prompt Engineering using the OpenAI Developer Platform, and can design and implement AI integrations to enhance products and create intelligent, automated solutions. He specializes in Test Automation, including UI test frameworks, SDK and API test automation, setup, teardown, visual comparisons, and integration into CI/CD pipelines. As a leader, he manages test automation projects, backlogs, conducts code reviews, and collaborates across teams to align technical efforts with strategic objectives. Ruben is also an expert in Augmented Reality development for Android, iOS, HoloLens, and Magic Leap, with a focus on object tracking and spatial mapping, using developer tools to create immersive AR experiences.",
+            "Your interests: Soccer, golf, gaming, health, wellness, automation, generative AI.",
+            "Languages you speak: English, Spanish (fluent).",
+            `Ruben Lopez is the author who made this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/`,
+            "This chatbot is made using a system prompt that dynamically retrieves the top 5 closest knowledge matches, from its knowledge database (or embeddings store)"
         ];
     
         // Function to fetch embeddings for a given text input using OpenAI API
@@ -250,7 +357,7 @@
             return data.data[0].embedding; // Return the embedding from the response
         }
     
-        // Function to add relevant knowledge about naturopathy to the embeddings store
+        // Function to add concepts to the the embeddings store
         async function addContextualKnowledge() {
             // Loop through each concept to fetch its embedding and store it
             for (const concept of concepts) {
@@ -277,6 +384,24 @@
             console.log('Knowledge added for all PDF pages.');
         }
     
+        // Find the top_k (top 5) closest embeddings for a user's message (this way it draws from multiple embeddings instead of just 1)
+        async function findTopKEmbeddings(userMessage, top_k = 5) {
+            const userEmbedding = await fetchEmbedding(userMessage); // Get embedding for the user message
+            const similarities = []; // Array to store similarity scores and texts
+
+            // Loop through stored embeddings and calculate similarity
+            embeddingsStore.forEach(({ text, embedding }) => {
+                const similarity = cosineSimilarity(userEmbedding, embedding); // Calculate similarity
+                similarities.push({ text, similarity }); // Store the text and similarity score
+            });
+
+            // Sort by similarity in descending order and get the top_k matches
+            similarities.sort((a, b) => b.similarity - a.similarity);
+            const topMatches = similarities.slice(0, top_k).map(match => match.text);
+
+            return topMatches.join(" "); // Return the combined top matches as context
+        }
+
         // Function to calculate cosine similarity between two vectors (embeddings)
         function cosineSimilarity(vecA, vecB) {
             const dotProduct = vecA.reduce((acc, value, i) => acc + value * vecB[i], 0); // Calculate dot product
@@ -284,33 +409,36 @@
             const magnitudeB = Math.sqrt(vecB.reduce((acc, value) => acc + value ** 2, 0)); // Calculate magnitude of vector B
             return dotProduct / (magnitudeA * magnitudeB); // Return cosine similarity
         }
-    
-        // Function to find the closest matching embedding for a user's message
-        async function findClosestEmbedding(userMessage) {
-            const userEmbedding = await fetchEmbedding(userMessage); // Get embedding for the user message
-            let closestMatch = null; // Variable to store the closest matching concept
-            let highestSimilarity = -1; // Initialize highest similarity score
-    
-            // Loop through stored embeddings to find the closest match
-            embeddingsStore.forEach(({ text, embedding }) => {
-                const similarity = cosineSimilarity(userEmbedding, embedding); // Calculate similarity
-                if (similarity > highestSimilarity) { // If this match is better than the previous best
-                    highestSimilarity = similarity; // Update highest similarity score
-                    closestMatch = text; // Update closest match
-                }
-            });
-    
-            return closestMatch; // Return the closest matching text
+
+        // Function to show typing animation with fade-in effect
+        function showTypingAnimation() {
+            const typingGif = document.getElementById('typingGif');
+            typingGif.classList.add('visible'); // Add visible class to trigger fade-in
         }
-    
+
+        // Function to hide typing animation with fade-out effect
+        function hideTypingAnimation() {
+            const typingGif = document.getElementById('typingGif');
+            typingGif.classList.remove('visible'); // Remove visible class to trigger fade-out
+        }   
+
+        // Global variable to hold the bot message element
+        const botMessageElement = document.createElement('div');
+        botMessageElement.classList.add('bot-message'); // Assign class for styling
+        document.getElementById('conversation').appendChild(botMessageElement); // Add bot message element to conversation
+
         // Function to send a message and get a response from the chatbot
         async function sendMessage() {
             const userMessage = document.getElementById('userInput').value; // Get user input
             const conversation = document.getElementById('conversation'); // Get the conversation element
-    
+
+            // Clear previous message
+            botMessageElement.innerHTML = '';
+            showTypingAnimation();
+
             // Add user's message to the conversation
-            conversation.innerHTML += `<p class="user-message">${userMessage}</p>`;
-            conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom of the conversation
+            //conversation.innerHTML += `<p class="user-message">${userMessage}</p>`;
+            //conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom of the conversation
     
             // Clear the input field
             document.getElementById('userInput').value = '';
@@ -319,21 +447,23 @@
             messageHistory.push({ role: "user", content: userMessage });
     
             // Find the closest embedding match for the user message
-            const closestMatch = await findClosestEmbedding(userMessage);
+            const closestMatch = await findTopKEmbeddings(userMessage);
             let context = ''; // Variable to hold contextual information
     
             if (closestMatch) {
-                context = `Here’s a relevant point I found: ${closestMatch}. `; // Set context if a match is found
+                context = `${closestMatch}`; // Set context if a match is found
             }
     
             // Define the system prompt for the AI with integrated context
             const systemPrompt = `
                 ${role}
-                ${goal}
-                Use the following knowledge for context: ${context}
-                ${userInteraction}
-                ${tone}
-                ${outcome}
+
+                Background context: ${context}
+
+
+
+                User: ${userMessage}
+                Ruben:
             `;
     
             try {
@@ -348,7 +478,7 @@
                         model: model, // Specify the model to be used for chat
                         messages: [{ role: 'system', content: systemPrompt }, ...messageHistory], // Include system prompt and message history
                         max_tokens: maxResponseLength, // Limit the response length
-                        temperature: 0.7, // Set the temperature for response variability
+                        temperature: 0.2, // Set the temperature for response variability
                     }),
                 });
     
@@ -356,6 +486,7 @@
                 const botMessage = data.choices[0].message.content; // Extract the chatbot's message
     
                 messageHistory.push({ role: "assistant", content: botMessage }); // Add bot's message to history
+                hideTypingAnimation(); 
                 streamBotResponse(botMessage); // Call function to display bot's response
             } catch (error) {
                 console.error(error); // Log any errors to the console
@@ -368,17 +499,16 @@
             displaySystemParameters(systemPrompt, context);
         }
     
+
         // Function to stream the bot's response character by character
         function streamBotResponse(message) {
             const conversation = document.getElementById('conversation'); // Get conversation element
             let index = 0; // Initialize index for streaming
-    
-            // Create a new div for the bot message
-            const botMessageElement = document.createElement('div');
-            botMessageElement.classList.add('bot-message'); // Assign class for styling
-            conversation.appendChild(botMessageElement); // Add bot message element to conversation
+
+            // Clear previous message
+            botMessageElement.innerHTML = ''; // Clear the content of the existing message
             conversation.scrollTop = conversation.scrollHeight; // Scroll to the bottom
-    
+
             // Interval to display the message gradually
             const interval = setInterval(() => {
                 if (index < message.length) { // While there are more characters to display
@@ -405,10 +535,6 @@
         // build initial prompt
         let initialPrompt = `
             ${role}
-            ${goal}
-            ${userInteraction}
-            ${tone}
-            ${outcome}
         `;
 
         // Initial display of parameters
@@ -417,18 +543,19 @@
         function displaySystemParameters(systemPrompt, context) {
             const systemParametersDiv = document.getElementById('systemParameters');
             systemParametersDiv.innerHTML = `
-                <p><strong>Model:</strong> ${model}</p>
-                <p><strong>Max Response Length:</strong> ${maxResponseLength} tokens</p>
-                <p><strong>System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${systemPrompt.trim()}</p>
-                <p><strong>Closest Knowledge Match:</strong> ${context.trim()}</p>
-                <p><strong>Contextual Knowledge:</strong> ${concepts.join(", ")}</p>
+                <p><strong>🤖 Model:</strong> ${model}</p>
+                <p><strong>📝 Max Response Length:</strong> ${maxResponseLength} tokens</p>
+                <p><strong>🗣️ System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${systemPrompt.trim()}</p>
+                <p><strong>🔍 Knowledge Match:</strong> ${context.trim()}</p>
+                <p><strong>📚 Knowledge Database:</strong> ${concepts.join(", ")}</p>
             `;
         }
 
         // Automatically send a greeting message after the page loads (2 seconds in)
         window.onload = () => setTimeout(() => {
-            streamBotResponse("What health concerns or questions do you have in mind today?")
+            streamBotResponse("Hey! 👋 I’m Ruben—well, the AI version of him 😊—here to chat about my work, skills, and projects. Feel free to ask me anything about my experience, career journey, or what I’m good at!")
         }, 2000);
+        
 
 
         async function extractTextFromPDF(pdfUrl) {
