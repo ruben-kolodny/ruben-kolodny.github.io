@@ -551,8 +551,10 @@
             `;
         }
 
+        showTypingAnimation();
         // Automatically send a greeting message after the page loads (2 seconds in)
         window.onload = () => setTimeout(() => {
+            hideTypingAnimation();
             streamBotResponse("Hey! 👋 I’m Ruben—well, the AI version of him 😊—here to chat about my work, skills, and projects. Feel free to ask me anything about my experience, career journey, or what I’m good at!")
         }, 2000);
         
