@@ -366,8 +366,8 @@
             }
         }
         
-        async function addPDFKnowledge() {
-            const pdfPages = await extractTextFromPDF("https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf");
+        async function addPDFKnowledge(pathToPDF) {
+            const pdfPages = await extractTextFromPDF(pathToPDF);
 
             for (let pageNum = 0; pageNum < pdfPages.length; pageNum++) {
                 const pageText = pdfPages[pageNum]; // Get text for the current page
@@ -446,7 +446,7 @@
             // Add the user's message to the message history
             messageHistory.push({ role: "user", content: userMessage });
     
-            // Find the closest embedding match for the user message
+            // Find the closest embedding matches for the user message
             const closestMatch = await findTopKEmbeddings(userMessage);
             let context = ''; // Variable to hold contextual information
     
@@ -530,7 +530,6 @@
     
         // Initialize the embeddings store by adding some knowledge
         addContextualKnowledge(); // Call the function to populate the embeddings store with contextual knowledge
-        //addPDFKnowledge(); // Call the function to popupulate the embeddings store with pages of PDF
 
         // build initial prompt
         let initialPrompt = `

@@ -216,14 +216,19 @@
         const maxResponseLength = 1000; // measured in tokens
 
         // Build the system prompt with the following components:
-        const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness, following the principles in your embeddings store.`
+        const role = `You are a Doctor of Vitalistic Naturopathic Medicine with a holistic approach to health and wellness.`
         const goal = `Your goal is to give personalized health consultations, as if you are their healthcare provider or doctor.`
-        const userInteraction = `Based on the user's input, provide clear answers and actionable, tailored treatment suggestions, based on the content in your embeddings store.`
+        const userInteraction = `Based on the user's input, provide clear answers and actionable, tailored treatment suggestions, informed by the most relevant knowledge available.`
         const tone = `Use a compassionate and empathetic tone, guiding users towards holistic health solutions that consider their physical, emotional, and environmental well-being.` 
         const outcome = `Always aim to empower users with knowledge and actionable steps they can take towards achieving their wellness goals.`
 
         // knowledge base
         const concepts = [
+                "Eat whole, real food: Focus on vegetables, healthy fats, clean proteins, and fiber-rich carbs. Ditch the processed, sugary foods that fuel inflammation and disease",
+                "Move daily: Exercise doesn't have to be complicated - just get moving! Aim for 30 minutes of walking, strength training, or yoga each day to support heart, muscles, and brain",
+                "Manage stress: Chronic stress drives inflammation and hormonal imbalances. Simple practices like meditation, deep breathing or even spending time in nature can do wonders for calming your mind and body",
+                "Prioritize sleep: Sleep is when your body heals and regenerates. Aim for 7-8 hours of quality sleep each night to support your immune system, brain, and metabolism",
+                "Reduce toxins: From the air we breath to the food we eat, toxins are everywhere. Start by switching to non-toxic cleaning products and reducing plastic use, and choose organic foods when possible",
                 "Ruben Lopez is the author who programmed this chatbot and webpage. For more info on him, you can go to this link: https://www.linkedin.com/in/ruben-k-lopez/ "
         ];
     
@@ -254,8 +259,8 @@
             }
         }
         
-        async function addPDFKnowledge() {
-            const pdfPages = await extractTextFromPDF("https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf");
+        async function addPDFKnowledge(pathToPDF) {
+            const pdfPages = await extractTextFromPDF(pathToPDF);
 
             for (let pageNum = 0; pageNum < pdfPages.length; pageNum++) {
                 const pageText = pdfPages[pageNum]; // Get text for the current page
@@ -272,30 +277,30 @@
             console.log('Knowledge added for all PDF pages.');
         }
     
+        // Find the top_k (top 5) closest embeddings for a user's message (this way it draws from multiple embeddings instead of just 1)
+        async function findTopKEmbeddings(userMessage, top_k = 5) {
+            const userEmbedding = await fetchEmbedding(userMessage); // Get embedding for the user message
+            const similarities = []; // Array to store similarity scores and texts
+
+            // Loop through stored embeddings and calculate similarity
+            embeddingsStore.forEach(({ text, embedding }) => {
+                const similarity = cosineSimilarity(userEmbedding, embedding); // Calculate similarity
+                similarities.push({ text, similarity }); // Store the text and similarity score
+            });
+
+            // Sort by similarity in descending order and get the top_k matches
+            similarities.sort((a, b) => b.similarity - a.similarity);
+            const topMatches = similarities.slice(0, top_k).map(match => match.text);
+
+            return topMatches.join(" "); // Return the combined top matches as context
+        }
+
         // Function to calculate cosine similarity between two vectors (embeddings)
         function cosineSimilarity(vecA, vecB) {
             const dotProduct = vecA.reduce((acc, value, i) => acc + value * vecB[i], 0); // Calculate dot product
             const magnitudeA = Math.sqrt(vecA.reduce((acc, value) => acc + value ** 2, 0)); // Calculate magnitude of vector A
             const magnitudeB = Math.sqrt(vecB.reduce((acc, value) => acc + value ** 2, 0)); // Calculate magnitude of vector B
             return dotProduct / (magnitudeA * magnitudeB); // Return cosine similarity
-        }
-    
-        // Function to find the closest matching embedding for a user's message
-        async function findClosestEmbedding(userMessage) {
-            const userEmbedding = await fetchEmbedding(userMessage); // Get embedding for the user message
-            let closestMatch = null; // Variable to store the closest matching concept
-            let highestSimilarity = -1; // Initialize highest similarity score
-    
-            // Loop through stored embeddings to find the closest match
-            embeddingsStore.forEach(({ text, embedding }) => {
-                const similarity = cosineSimilarity(userEmbedding, embedding); // Calculate similarity
-                if (similarity > highestSimilarity) { // If this match is better than the previous best
-                    highestSimilarity = similarity; // Update highest similarity score
-                    closestMatch = text; // Update closest match
-                }
-            });
-    
-            return closestMatch; // Return the closest matching text
         }
     
         // Function to send a message and get a response from the chatbot
@@ -313,28 +318,27 @@
             // Add the user's message to the message history
             messageHistory.push({ role: "user", content: userMessage });
     
-            // Find the closest embedding match for the user message
-            const closestMatch = await findClosestEmbedding(userMessage);
+            // Find the closest embedding matches for the user message
+            const closestMatch = await findTopKEmbeddings(userMessage);
             let context = ''; // Variable to hold contextual information
     
             if (closestMatch) {
-                context = `Here’s a relevant point I found: ${closestMatch}. `; // Set context if a match is found
+                context = `${closestMatch}. `; // Set context if a match is found
             }
     
             // Define the system prompt for the AI with integrated context
             const systemPrompt = `
                 ${role}
                 ${goal}
-
-
-                Use the following knowledge for context: 
-                
-                ${context}
-
-
                 ${userInteraction}
                 ${tone}
                 ${outcome}
+
+
+                Use the following contextual knowledge to inform your response: 
+                
+
+                ${context}
             `;
     
             try {
@@ -401,7 +405,7 @@
     
         // Initialize the embeddings store by adding some knowledge
         addContextualKnowledge(); // Call the function to populate the embeddings store with contextual knowledge
-        addPDFKnowledge(); // Call the function to popupulate the embeddings store with pages of PDF
+        addPDFKnowledge("https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf"); // Call the function to popupulate the embeddings store with pages of PDF
 
         // build initial prompt
         let initialPrompt = `
@@ -418,12 +422,12 @@
         function displaySystemParameters(systemPrompt, context) {
             const systemParametersDiv = document.getElementById('systemParameters');
             systemParametersDiv.innerHTML = `
-                <p><strong>Model:</strong> ${model}</p>
-                <p><strong>Max Response Length:</strong> ${maxResponseLength} tokens</p>
-                <p><strong>System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${systemPrompt.trim()}</p>
-                <p><strong>Closest Knowledge Match:</strong> ${context.trim()}</p>
-                <p><strong>Contextual Knowledge:</strong> ${concepts.join(", ")}</p>
-                 <p><strong>PDF Knowledge:</strong> <a href="https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf" target="_blank">MantraWellnessOrganization.pdf</a></p>
+                <p><strong>🤖 Model:</strong> ${model}</p>
+                <p><strong>📝 Max Response Length:</strong> ${maxResponseLength} tokens</p>
+                <p><strong>🗣️ System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${initialPrompt.trim()}</p>
+                <p><strong>🔍 Knowledge Match:</strong> ${context.trim()}</p>
+                <p><strong>📚 Knowledge Database:</strong> ${concepts.join(", ")}</p>
+                 <p><strong>📚 PDF Knowledge:</strong> <a href="https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf" target="_blank">MantraWellnessOrganization.pdf</a></p>
             `;
         }
 
