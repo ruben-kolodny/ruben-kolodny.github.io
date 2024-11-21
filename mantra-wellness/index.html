@@ -406,6 +406,8 @@
         // Initialize the embeddings store by adding some knowledge
         addContextualKnowledge(); // Call the function to populate the embeddings store with contextual knowledge
         addPDFKnowledge("https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf"); // Call the function to popupulate the embeddings store with pages of PDF
+        addPDFKnowledge("https://ruben-kolodny.github.io/pdfs/BastyrMateriaMedicaBotanicalMedicine.pdf"); // Call the function to popupulate the embeddings store with pages of PDF
+
 
         // build initial prompt
         let initialPrompt = `
@@ -427,7 +429,9 @@
                 <p><strong>🗣️ System Prompt (w/ Dynamic Knowledge Retrieval):</strong> ${initialPrompt.trim()}</p>
                 <p><strong>🔍 Knowledge Match:</strong> ${context.trim()}</p>
                 <p><strong>📚 Knowledge Database:</strong> ${concepts.join(", ")}</p>
-                 <p><strong>📚 PDF Knowledge:</strong> <a href="https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf" target="_blank">MantraWellnessOrganization.pdf</a></p>
+                 <p><strong>📚 PDF Knowledge:</strong> <a href="https://ruben-kolodny.github.io/pdfs/MantraWellnessOrganization.pdf" target="_blank">MantraWellnessOrganization.pdf</a>, 
+                    <a href="https://ruben-kolodny.github.io/pdfs/BastyrMateriaMedicaBotanicalMedicine.pdf" target="_blank">BastyrMateriaMedicaBotanicalMedicine.pdf</a>
+                    </p>
             `;
         }
 
